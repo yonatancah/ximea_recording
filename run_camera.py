@@ -1,6 +1,20 @@
-from camera import CameraSettings
-from camera.ximea_camera import XimeaCamera
+from argparse import ArgumentParser
+import importlib
+
 import cv2
+
+from camera import CameraSettings
+
+parser = ArgumentParser(description="View a Camera")
+parser.add_argument('--cam-type', '-c', choices=['ximea', 'dummy'], default='ximea')
+args = parser.parse_args()
+
+cam_types = {
+    'ximea': lambda: importlib.import_module('camera.ximea_camera').XimeaCamera,
+    'dummy': lambda: importlib.import_module('camera.dummy_camera').DummyCamera,
+}
+
+CamType = cam_types[args.cam_type]()
 
 settings = CameraSettings(
     exposure_usec=40000, 
@@ -10,7 +24,8 @@ settings = CameraSettings(
     bit_depth=24,
 )
 
-cam = XimeaCamera.open(id="CAM2")
+
+cam = CamType.open(id="CAM2")
 
 cam.set_settings(settings=settings)
 cam.start()

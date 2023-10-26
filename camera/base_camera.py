@@ -34,10 +34,7 @@ class BaseCamera(ABC):
 
     @abstractmethod
     def get_frame(self) -> Frame:
-        return Frame(
-            timestamp=...,
-            corrected_timestamp=...,
-        )
+        ...
 
 
 
