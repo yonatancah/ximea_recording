@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from config import load_config
+from config import ConfigData
 from camera import Camera
 from camera_worker import CameraWorker
 from triggers import wait_trigger
 
 
-config = load_config(fname='config.yaml')
+config = ConfigData.from_yaml(fname='config.yaml')
 
 # Baseline Timestamp
 cams: list[Camera] = []
