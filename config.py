@@ -48,6 +48,5 @@ class ConfigData(NamedTuple):
 
 
 if __name__ == '__main__':
-    
     config = ConfigData.from_yaml('config.yaml')
     print(config)
