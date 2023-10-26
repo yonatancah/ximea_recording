@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 
-from typing import NamedTuple
+from typing import NamedTuple, Type
 from multiprocessing import Process, Queue
 from camera import CameraSettings
 
@@ -10,14 +10,15 @@ from writers import VideoWriter, TimestampWriter
 
 ## Program Configuration
 
-def run_camera(queue: Queue, cam_id: str, cam_settings: CameraSettings, timestamp_correction: int = 0) -> None:
-    cam = BaseCamera.open(id=cam_id)
+def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settings: CameraSettings, timestamp_correction: int = 0) -> None:
+    cam = cam_type.open(id=cam_id)
     cam.set_settings(settings=cam_settings)
-    cam.set_timestamp_correction(timestamp_correction)
+    # cam.set_timestamp_correction(timestamp_correction)
 
     while True:
         event = queue.get()
         if event.type == "start":
+            print(f"{cam_id} Process: received start trigger", flush=True)
             event: StartEvent
             path = Path(event.destination).with_suffix(cam_id)
             video_writer = VideoWriter.open(fname=str(path.with_suffix(".mkv")))
@@ -72,10 +73,10 @@ class CameraWorker(NamedTuple):
     queue: Queue
 
     @classmethod
-    def init(cls, cam_id: str, cam_settings: CameraSettings, timestamp_correction: int = 0) -> CameraWorker:
+    def init(cls, cam_type: Type[BaseCamera], cam_id: str, cam_settings: CameraSettings, timestamp_correction: int = 0) -> CameraWorker:
         queue = Queue()
         return CameraWorker(
-            process=Process(target=run_camera, args=(queue, cam_id, cam_settings, timestamp_correction)),
+            process=Process(target=run_camera, args=(queue, cam_type, cam_id, cam_settings, timestamp_correction)),
             queue=queue,
         )
 
