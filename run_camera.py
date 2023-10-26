@@ -6,12 +6,13 @@ import cv2
 from camera import CameraSettings
 
 parser = ArgumentParser(description="View a Camera")
-parser.add_argument('--cam-type', '-c', choices=['ximea', 'dummy'], default='ximea')
+parser.add_argument('--cam-type', '-c', choices=['ximea', 'opencv', 'dummy'], default='ximea')
 args = parser.parse_args()
 
 cam_types = {
     'ximea': lambda: importlib.import_module('camera.ximea_camera').XimeaCamera,
     'dummy': lambda: importlib.import_module('camera.dummy_camera').DummyCamera,
+    'opencv': lambda: importlib.import_module('camera.opencv_camera').OpenCVCamera,
 }
 
 CamType = cam_types[args.cam_type]()
