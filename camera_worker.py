@@ -6,7 +6,9 @@ from multiprocessing import Process, Queue
 from camera import CameraSettings
 
 from camera.base_camera import BaseCamera
-from writers import VideoWriter, TimestampWriter
+from video_writers.opencv import OpenCVVideoWriter
+from timestamp_writers.csv import CSVTimestampWriter
+
 
 ## Program Configuration
 
@@ -21,8 +23,8 @@ def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settin
             print(f"{cam_id} Process: received start trigger", flush=True)
             event: StartEvent
             path = Path(event.destination).with_suffix(cam_id)
-            video_writer = VideoWriter.open(fname=str(path.with_suffix(".mkv")))
-            timestamp_writer = TimestampWriter.open(str(path.with_suffix("_timestamps.txt")))
+            video_writer = OpenCVVideoWriter.open(fname=str(path.with_suffix(".mkv")))
+            timestamp_writer = CSVTimestampWriter.open(str(path.with_suffix("_timestamps.txt")))
             cam.start()
             while True:
                 if queue.empty():
