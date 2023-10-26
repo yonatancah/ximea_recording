@@ -3,13 +3,12 @@ from pathlib import Path
 
 from typing import NamedTuple
 from multiprocessing import Process, Queue
-from camera.CameraSettings import CameraSettings
+from camera import CameraSettings
 
 from camera.base_camera import BaseCamera
 from writers import VideoWriter, TimestampWriter
 
 ## Program Configuration
-
 
 def run_camera(queue: Queue, cam_id: str, cam_settings: CameraSettings, timestamp_correction: int = 0) -> None:
     cam = BaseCamera.open(id=cam_id)

@@ -20,6 +20,7 @@ print(cam.get_timestamp_micro())
 
 while True:
     frame=cam.get_frame()
+    print(frame.image.shape)
 
     cv2.putText(
         frame.image, str(frame.timestamp), (900, 150), cv2.FONT_HERSHEY_SIMPLEX, 4, (255, 255, 255), 2

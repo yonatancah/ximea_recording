@@ -23,9 +23,9 @@ timestamp_corrections = get_multi_camera_timestamp_corrections(cams=cams)
 print(timestamp_corrections)
 
 
-# for cam in cams:
-#    cam.stop()
-#    cam.close()
+for cam in cams:
+   cam.stop()
+   cam.close()
 
 
 # # Start Cameras
