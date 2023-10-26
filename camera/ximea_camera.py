@@ -1,5 +1,9 @@
-from .base_camera import BaseCamera, CameraSettings, Frame
 from ximea import xiapi
+
+from .camera_settings import CameraSettings
+from .frame import Frame
+from .base_camera import BaseCamera
+
 
 class XimeaCamera(BaseCamera):
 

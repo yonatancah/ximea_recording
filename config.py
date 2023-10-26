@@ -1,12 +1,11 @@
 from __future__ import annotations
-from pathlib import Path
 
+from pathlib import Path
 from typing import NamedTuple
 
-from camera import CameraSettings
 from yaml import load, CLoader
 
-## Program Configuration
+from camera import CameraSettings
 
 
 class ConfigData(NamedTuple):

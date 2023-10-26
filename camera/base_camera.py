@@ -1,18 +1,8 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-import time
 
-from typing import Iterable, Literal, NamedTuple
-
-from numpy.typing import NDArray
-
-
-class CameraSettings(NamedTuple):
-    exposure_usec: int
-    frame_rate: int
-    white_balance_auto: bool
-    image_format: Literal['RGB', 'MONO', 'RAW']
-    bit_depth: int
+from .camera_settings import CameraSettings
+from .frame import Frame
 
 
 class BaseCamera(ABC):
@@ -22,17 +12,6 @@ class BaseCamera(ABC):
     def open(cls, id: str) -> BaseCamera:
         ...
 
-    @staticmethod
-    def get_multi_camera_timestamp_corrections(cams: Iterable[BaseCamera]) -> list[int]:
-        baseline_corrections: list[int] = []
-        t0 = time.perf_counter_ns()
-        for cam in cams:
-            timestamp = cam.get_timestamp_micro()
-            t1 = time.perf_counter_ns()
-            dt = t1 - t0
-            correction = -(timestamp - dt)
-            baseline_corrections.append(correction)
-            
     @abstractmethod
     def set_settings(self, settings: CameraSettings) -> None:
         ...
@@ -63,6 +42,3 @@ class BaseCamera(ABC):
 
 
 
-class Frame(NamedTuple):
-    timestamp: int
-    image: NDArray
