@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from config import ConfigData
-from camera import get_multi_camera_timestamp_corrections
+from camera import CameraGroup
 from camera.ximea_camera import XimeaCamera
 from camera_worker import CameraWorker
 from triggers import wait_trigger
@@ -11,24 +11,11 @@ if __name__ == '__main__':
     config = ConfigData.from_yaml(fname='config.yaml')
     print(config)
 
-    # Baseline Timestamp
-    cams: list[XimeaCamera] = []
-    for cam_id in config.cam_ids:
-        cam = XimeaCamera.open(id=cam_id)
-        cam.set_settings(settings=config.cam_settings)
-        cam.start()
-        print(f"started {cam_id}.", flush=True)
-        cams.append(cam)
-
-    timestamp_corrections = get_multi_camera_timestamp_corrections(cams=cams)
-    print(timestamp_corrections)
-
-
-    for cam in cams:
-        cam.stop()
-        cam.close()
-
-
+    # Connect to Cams, collect baseline timestamps for timestamp alignment
+    cams = CameraGroup.init(cam_type=XimeaCamera, ids=config.cam_ids, settings=config.cam_settings, start=True, verbose=True)
+    timestamp_corrections = cams.get_multi_camera_timestamp_corrections()
+    cams.stop_and_close()
+    
     # Start Cameras
     workers: list[CameraWorker] = []
     for cam_id, timestamp_correction in zip(config.cam_ids, timestamp_corrections):
@@ -57,5 +44,5 @@ if __name__ == '__main__':
                 worker.send_close_event()
             break
 
-    # for worker in workers:
-    #     worker.join()
+    for worker in workers:
+        worker.join()

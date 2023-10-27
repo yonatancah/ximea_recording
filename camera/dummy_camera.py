@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 import time
 
 import numpy as np
+
 from .base_camera import BaseCamera, CameraSettings
 from .frame import Frame
+
 
 class DummyCamera(BaseCamera):
     
