@@ -13,10 +13,8 @@ from timestamp_writers.csv import CSVTimestampWriter
 ## Program Configuration
 
 def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settings: CameraSettings, timestamp_correction: int = 0) -> None:
-    cam = cam_type.open(id=cam_id)
-    cam.set_settings(settings=cam_settings)
-    # cam.set_timestamp_correction(timestamp_correction)
-
+    cam = cam_type.init(id=cam_id, settings=cam_settings, start=False, verbose=True)
+    
     while True:
         event = queue.get()
         if event.type == "start":
