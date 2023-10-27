@@ -41,7 +41,7 @@ class CameraGroup:
             cam.stop()
             cam.close()
     
-    def get_multi_camera_timestamp_corrections(self) -> list[int]:
+    def get_timestamp_corrections(self) -> list[int]:
         baseline_corrections: list[int] = []
         t0 = time.perf_counter_ns()
         for cam in self.cameras:

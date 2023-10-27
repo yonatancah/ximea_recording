@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     # Connect to Cams, collect baseline timestamps for timestamp alignment
     cams = CameraGroup.init(cam_type=XimeaCamera, ids=config.cam_ids, settings=config.cam_settings, start=True, verbose=True)
-    timestamp_corrections = cams.get_multi_camera_timestamp_corrections()
+    timestamp_corrections = cams.get_timestamp_corrections()
     cams.stop_and_close()
     
     # Start Cameras
