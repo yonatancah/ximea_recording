@@ -1,19 +1,22 @@
 from __future__ import annotations
+
 from typing import Literal
 
 import cv2
 from numpy.typing import NDArray
 
+from .base_writer import BaseVideoWriter
 
-class VideoWriter:
+
+class OpenCVVideoWriter(BaseVideoWriter):
 
     def __init__(self, writer: cv2.VideoWriter) -> None:
         self._writer: cv2.VideoWriter = writer
         self._isclosed = False
 
     @classmethod
-    def open(cls, fname: str, frame_rate: int, frame_width: int, frame_height: int, fourcc: Literal["FMP4"] = "FMP4") -> VideoWriter:
-        return VideoWriter(
+    def open(cls, fname: str, frame_rate: int, frame_width: int, frame_height: int, fourcc: Literal["FMP4"] = "FMP4") -> OpenCVVideoWriter:
+        return OpenCVVideoWriter(
             writer=cv2.VideoWriter(
                 fname,
                 cv2.VideoWriter_fourcc(*fourcc),
@@ -33,7 +36,7 @@ class VideoWriter:
     def is_closed(self) -> bool:
         return self._isclosed
 
-    def __enter__(self) -> VideoWriter:
+    def __enter__(self) -> OpenCVVideoWriter:
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -51,7 +54,7 @@ if __name__ == '__main__':
     fourcc = "FMP4"
 
     # Generate Video File with those properties
-    with VideoWriter.open(fname=fname, frame_rate=frame_rate, frame_width=shape[1], frame_height=shape[0], fourcc=fourcc) as writer:
+    with OpenCVVideoWriter.open(fname=fname, frame_rate=frame_rate, frame_width=shape[1], frame_height=shape[0], fourcc=fourcc) as writer:
         for _ in range(300):
             frame = np.random.randint(0, 255, size=shape, dtype=np.uint8)
             writer.write(frame=frame)

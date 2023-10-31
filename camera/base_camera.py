@@ -12,6 +12,22 @@ class BaseCamera(ABC):
     def open(cls, id: str) -> BaseCamera:
         ...
 
+    @classmethod
+    def init(cls, id: str, settings: CameraSettings = None, start: bool = False, verbose: bool = False) -> BaseCamera:
+        """
+        A convenient constructor for connecting to, setting up, and starting a Camera.
+        """
+        if verbose:
+            print(f"Connecting to camera {id}...", flush=True)
+        cam = cls.open(id=id)
+        if settings:
+            cam.set_settings(settings=settings)
+        if start:
+            cam.start()
+        if verbose:
+            print(f"...done", flush=True)
+        return cam
+
     @abstractmethod
     def set_settings(self, settings: CameraSettings) -> None:
         ...
@@ -34,10 +50,7 @@ class BaseCamera(ABC):
 
     @abstractmethod
     def get_frame(self) -> Frame:
-        return Frame(
-            timestamp=...,
-            corrected_timestamp=...,
-        )
+        ...
 
 
 
