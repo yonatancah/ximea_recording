@@ -34,14 +34,15 @@ class PyLSLTriggerDetector(BaseTriggerDetector):
 
             if sample is not None:
                 trigger_message=sample[0]
-                message=json.loads(trigger_message)
+                packet=json.loads(trigger_message)
+                command = packet['command']
+                data = packet['data']
 
-                if message.get('command')==start:
-                    self.start_trigger_detected.send()
 
-                elif message.get('command')==stop:
-                    self.stop_trigger_detected.send()
-
+                if command == start:
+                    self.start_trigger_detected.send(data)
+                elif command == stop:
+                    self.stop_trigger_detected.send(data)
                 else:
                     continue
 

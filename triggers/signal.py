@@ -8,6 +8,6 @@ class Signal:
     def connect(self, fun) -> None:
         self._observers.add(fun)
 
-    def send(self) -> None:
+    def send(self, *args, **kwargs) -> None:
         for fun in self._observers:
-            fun()
+            fun(*args, **kwargs)

@@ -5,9 +5,8 @@ from triggers.pylsl_trigger_detector import PyLSLTriggerDetector
 #detector = KeyboardTriggerDetector()
 
 detector = PyLSLTriggerDetector()
-detector.start_trigger_detected.connect(lambda: print('start detected'))
-detector.stop_trigger_detected.connect(lambda: print('stop detected'))
-detector.close_trigger_detected.connect(lambda: (print('close detected'), sys.exit()))
+detector.start_trigger_detected.connect(lambda data: print(data))
+detector.stop_trigger_detected.connect(lambda data: print(data))
 
 
 print('press a key')
