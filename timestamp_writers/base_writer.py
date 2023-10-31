@@ -10,8 +10,8 @@ class TimestampData(NamedTuple):
 
 class BaseTimestampWriter(ABC):
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def open(cls, fname: str) -> BaseTimestampWriter:
         ...
 
