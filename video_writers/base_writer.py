@@ -8,9 +8,9 @@ from numpy.typing import NDArray
 
 class BaseVideoWriter(ABC):
 
-    @abstractmethod
     @classmethod
-    def open(cls, fname: str, frame_rate: int, frame_width: int, frame_height: int, fourcc: Literal["FMP4"] = "FMP4") -> VideoWriter:
+    @abstractmethod
+    def open(cls, fname: str, frame_rate: int, frame_width: int, frame_height: int, fourcc: Literal["FMP4"] = "FMP4") -> BaseVideoWriter:
         ...
 
     @abstractmethod
