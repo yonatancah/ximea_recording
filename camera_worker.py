@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+import os
 
 from typing import NamedTuple, Type
 from multiprocessing import Process, Queue
@@ -16,27 +17,47 @@ def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settin
     cam = cam_type.init(id=cam_id, settings=cam_settings, start=False, verbose=True)
     
     while True:
+        print(f"{cam_id} waiting for queue to fill...")
         event = queue.get()
+        print(f"{cam_id} something is in the queue!")
         if event.type == "start":
             print(f"{cam_id} Process: received start trigger", flush=True)
             event: StartEvent
-            path = Path(event.destination).with_suffix(cam_id)
-            video_writer = OpenCVVideoWriter.open(fname=str(path.with_suffix(".mkv")))
-            timestamp_writer = CSVTimestampWriter.open(str(path.with_suffix("_timestamps.txt")))
+            base_path = Path(r"D:\\")
+            # test = r"C:\\Users\\VR-PC-User\\Desktop\\data\\S3_replication\\S3_rep_test\\9990\\S001\\camera\\XIMEARecording_T005_068_rock_novisible_close_attack_weapons_nosafehouse.mkv"
+            # event = StartEvent(destination=test)
+            destination_path = base_path.joinpath(*Path(event.destination).parts[5:])
+            destination_path.mkdir(parents=True, exist_ok=True)
+
+            frame = cam.get_frame()
+            height, width, _ = frame.image.shape
+            video_path = destination_path.joinpath(f"{cam_id}_{destination_path.stem}.mkv")
+            print("opening files")
+            video_writer = OpenCVVideoWriter.open(
+                fname=str(video_path), 
+                frame_rate=cam_settings.frame_rate, 
+                frame_width=width,
+                frame_height=height,
+            )
+            
+            # timestamp_writer = CSVTimestampWriter.open(str(video_path.with_suffix(".txt")))
+            
+            print("starting camera...")
             cam.start()
             while True:
                 if queue.empty():
                     frame = cam.get_frame()
-                    video_writer.write(frame=frame)
-                    timestamp_writer.write(
-                        timestamp=frame.timestamp, 
-                        corrected_timestamp=frame.corrected_timestamp,
-                    )
+                    video_writer.write(frame=frame.image)
+                    # timestamp_writer.write(
+                    #     timestamp=frame.timestamp, 
+                    #     corrected_timestamp=0, # frame.corrected_timestamp,  TODO
+                    # )
                 else:
                     event = queue.get()
                     if event.type == "stop":
+                        print(f"{cam_id} Process: received stop trigger", flush=True)
                         video_writer.close()
-                        timestamp_writer.close()
+                        # timestamp_writer.close()
                         cam.stop()
                         break
                     elif event.type == "close":
@@ -45,6 +66,7 @@ def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settin
                     else:
                         raise ValueError(f"Unrecognized Event: {event}")
         elif event.type == "close":
+            print(f"{cam_id} Process: received close trigger", flush=True)
             cam.close()
             return
         else:

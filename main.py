@@ -5,7 +5,6 @@ from config import ConfigData
 from camera import CameraGroup
 from camera.ximea_camera import XimeaCamera
 from camera_worker import CameraWorker
-from triggers import wait_trigger
 from triggers.pylsl_trigger_detector import PyLSLTriggerDetector
 
 
@@ -38,13 +37,13 @@ if __name__ == '__main__':
     def send_start_event(workers, destination):
         for worker in workers:
             print("sending start event to worker, ", destination)
-            # worker.send_start_event(destination=destination)
+            worker.send_start_event(destination=destination)
     trigger_detector.start_trigger_detected.connect(lambda data: send_start_event(workers=workers, destination=data['destination']))
 
     def send_stop_event(workers):
         for worker in workers:
             print("sending stop event to worker.")
-            # worker.send_stop_event()
+            worker.send_stop_event()
 
     trigger_detector.stop_trigger_detected.connect(lambda data: send_stop_event(workers=workers))
 
