@@ -10,22 +10,30 @@ from .base_writer import BaseVideoWriter
 
 class OpenCVVideoWriter(BaseVideoWriter):
 
-    def __init__(self, writer: cv2.VideoWriter) -> None:
-        self._writer: cv2.VideoWriter = writer
+    def __init__(self, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4") -> None:
+        self.fname = fname
+        self.fourcc = fourcc
+        self.frame_rate = frame_rate
+        self._writer: cv2.VideoWriter = None
         self._isclosed = False
 
     @classmethod
-    def open(cls, fname: str, frame_rate: int, frame_width: int, frame_height: int, fourcc: Literal["FMP4"] = "FMP4") -> OpenCVVideoWriter:
+    def open(cls, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4") -> OpenCVVideoWriter:
         return OpenCVVideoWriter(
-            writer=cv2.VideoWriter(
-                fname,
-                cv2.VideoWriter_fourcc(*fourcc),
-                frame_rate,
-                (frame_width, frame_height),
-            ),
+            fname=fname,
+            frame_rate=frame_rate,
+            fourcc=fourcc,
         )
 
     def write(self, frame: NDArray) -> None:
+        height, width, _ = frame.shape
+        if not self._writer:
+            self._writer = cv2.VideoWriter(
+                self.fname,
+                cv2.VideoWriter_fourcc(*self.fourcc),
+                self.frame_rate,
+                (width, height),
+            )
         self._writer.write(frame)
 
     def close(self) -> None:

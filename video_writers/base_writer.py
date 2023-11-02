@@ -10,7 +10,7 @@ class BaseVideoWriter(ABC):
 
     @classmethod
     @abstractmethod
-    def open(cls, fname: str, frame_rate: int, frame_width: int, frame_height: int, fourcc: Literal["FMP4"] = "FMP4") -> BaseVideoWriter:
+    def open(cls, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4") -> BaseVideoWriter:
         ...
 
     @abstractmethod
