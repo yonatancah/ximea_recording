@@ -20,6 +20,7 @@ class XimeaCamera(BaseCamera):
     
     def set_settings(self, settings: CameraSettings) -> None:
         self.cam.set_exposure(settings.exposure_usec)
+        self.cam.set_acq_timing_mode('XI_ACQ_TIMING_MODE_FRAME_RATE_LIMIT')
         self.cam.set_framerate(settings.frame_rate)
         if settings.white_balance_auto:
             self.cam.enable_auto_wb()
