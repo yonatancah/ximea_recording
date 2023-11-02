@@ -48,11 +48,5 @@ if __name__ == '__main__':
 
     trigger_detector.stop_trigger_detected.connect(lambda data: send_stop_event(workers=workers))
 
-
-
     while True:
         trigger_detector.wait_for_triggers(start='start', stop='stop', close=None)
-
-
-#     for worker in workers:
-#         worker.join()

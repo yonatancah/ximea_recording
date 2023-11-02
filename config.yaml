@@ -8,7 +8,8 @@ camera-ids:
 
 
 camera-settings:
-  exposure: 10000
+  exposure: 8000
+  gain_analog: 17
   frame_rate: 60
   auto-white_balance: true
   image-format: RGB

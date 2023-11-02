@@ -34,6 +34,7 @@ class ConfigData(NamedTuple):
             cam_ids=cam_ids,
             cam_settings=CameraSettings(
                 exposure_usec=settings['exposure'],
+                gain_analog=settings['gain_analog'],
                 frame_rate=settings['frame_rate'],
                 white_balance_auto=settings['auto-white_balance'],
                 image_format=settings['image-format'],

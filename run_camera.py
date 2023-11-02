@@ -33,7 +33,8 @@ cam_types = {
 CamType: Type[BaseCamera] = cam_types[args.cam_type]()
 
 settings = CameraSettings(
-    exposure_usec=8000, 
+    exposure_usec=8000,
+    gain_analog=17,
     frame_rate=60, 
     white_balance_auto="auto", 
     image_format="RGB",
@@ -54,8 +55,6 @@ print(cam.get_timestamp_micro())
 
 while True:
     frame=cam.get_frame()
-    print(frame.image.shape)
-
     cv2.putText(frame.image, str(frame.timestamp), (900, 150), cv2.FONT_HERSHEY_SIMPLEX, 4, (255, 255, 255), 2)
     cv2.imshow("Camera", frame.image)
     video_writer.write(frame=frame.image)

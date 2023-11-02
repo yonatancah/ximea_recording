@@ -20,6 +20,10 @@ class XimeaCamera(BaseCamera):
     
     def set_settings(self, settings: CameraSettings) -> None:
         self.cam.set_exposure(settings.exposure_usec)
+        
+        self.cam.set_gain_selector('XI_GAIN_SELECTOR_ANALOG_ALL')
+        self.cam.set_gain_direct(settings.gain_analog)
+
         self.cam.set_acq_timing_mode('XI_ACQ_TIMING_MODE_FRAME_RATE_LIMIT')
         self.cam.set_framerate(settings.frame_rate)
         if settings.white_balance_auto:
