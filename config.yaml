@@ -1,12 +1,12 @@
 camera-ids:
+  - CAM1
   - CAM2
   - CAM3
-  - CAM7
 
 
 camera-settings:
-  exposure: 100
-  frame_rate: 100
+  exposure: 10000
+  frame_rate: 60
   auto-white_balance: true
   image-format: RGB
   bit-depth: 24

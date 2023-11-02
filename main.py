@@ -13,8 +13,8 @@ if __name__ == '__main__':
     print(config)
 
     # Connect to Cams, collect baseline timestamps for timestamp alignment
-    # cams = CameraGroup.init(cam_type=XimeaCamera, ids=config.cam_ids, settings=config.cam_settings, start=True, verbose=True)
-    cams = CameraGroup.init(cam_type=DummyCamera, ids=config.cam_ids, settings=config.cam_settings, start=True, verbose=True)
+    cams = CameraGroup.init(cam_type=XimeaCamera, ids=config.cam_ids, settings=config.cam_settings, start=True, verbose=True)
+    # cams = CameraGroup.init(cam_type=DummyCamera, ids=config.cam_ids, settings=config.cam_settings, start=True, verbose=True)
     timestamp_corrections = cams.get_timestamp_corrections()
     print(timestamp_corrections)
     cams.stop_and_close()
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     workers: list[CameraWorker] = []
     for cam_id, timestamp_correction in zip(config.cam_ids, timestamp_corrections):
         worker = CameraWorker.init(
-            cam_type=DummyCamera,
+            cam_type=type(cams.cameras[0]),
             cam_id=cam_id, 
             cam_settings=config.cam_settings, 
             timestamp_correction=timestamp_correction

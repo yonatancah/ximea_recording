@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .base_writer import BaseTimestampWriter, TimestampData
+from .base_writer import BaseTimestampWriter
 
 import csv
 
@@ -20,8 +20,8 @@ class CSVTimestampWriter(BaseTimestampWriter):
         return CSVTimestampWriter(writer=writer, file=file)
 
 
-    def write(self, timestamp: TimestampData) -> None:
-        self._writer.writerow([timestamp.timestamp, timestamp.corrected_timestamp])
+    def write(self, timestamp: int, timestamp_correction: int = 0) -> None:
+        self._writer.writerow([timestamp, timestamp + timestamp_correction])
 
 
     def close(self) -> None:
@@ -33,5 +33,5 @@ if __name__ == '__main__':
     writer = CSVTimestampWriter.open("test_timestamps.csv")
 
     for t in range(10):
-        writer.write(timestamp=TimestampData(t, t*10))
+        writer.write(timestamp=t(t, t*10))
     writer.close()

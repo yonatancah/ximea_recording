@@ -1,11 +1,6 @@
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import NamedTuple
-
-
-class TimestampData(NamedTuple):
-    timestamp: int
-    corrected_timestamp: int
 
 
 class BaseTimestampWriter(ABC):
@@ -16,7 +11,7 @@ class BaseTimestampWriter(ABC):
         ...
 
     @abstractmethod
-    def write(self, timestamp: TimestampData) -> None:
+    def write(self, timestamp: int, corrected_timestamp: int = 0) -> None:
         ...
 
     @abstractmethod

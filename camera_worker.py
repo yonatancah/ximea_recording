@@ -29,35 +29,27 @@ def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settin
             destination_path = base_path.joinpath(*Path(event.destination).parts[5:])
             destination_path.mkdir(parents=True, exist_ok=True)
 
-            frame = cam.get_frame()
-            height, width, _ = frame.image.shape
             video_path = destination_path.joinpath(f"{cam_id}_{destination_path.stem}.mkv")
-            print("opening files")
-            video_writer = OpenCVVideoWriter.open(
-                fname=str(video_path), 
-                frame_rate=cam_settings.frame_rate, 
-                frame_width=width,
-                frame_height=height,
-            )
+            print(f"{cam_id} opening files")
+            video_writer = OpenCVVideoWriter.open(fname=str(video_path), frame_rate=cam_settings.frame_rate)
+            timestamp_writer = CSVTimestampWriter.open(str(video_path.with_suffix(".txt")))
             
-            # timestamp_writer = CSVTimestampWriter.open(str(video_path.with_suffix(".txt")))
-            
-            print("starting camera...")
+            print(f"{cam_id} starting camera...")
             cam.start()
             while True:
                 if queue.empty():
                     frame = cam.get_frame()
                     video_writer.write(frame=frame.image)
-                    # timestamp_writer.write(
-                    #     timestamp=frame.timestamp, 
-                    #     corrected_timestamp=0, # frame.corrected_timestamp,  TODO
-                    # )
+                    timestamp_writer.write(
+                        timestamp=frame.timestamp, 
+                        timestamp_correction=timestamp_correction, #  TODO
+                    )
                 else:
                     event = queue.get()
                     if event.type == "stop":
                         print(f"{cam_id} Process: received stop trigger", flush=True)
                         video_writer.close()
-                        # timestamp_writer.close()
+                        timestamp_writer.close()
                         cam.stop()
                         break
                     elif event.type == "close":

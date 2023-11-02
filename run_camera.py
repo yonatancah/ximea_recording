@@ -39,7 +39,11 @@ settings = CameraSettings(
     bit_depth=24,
 )
 
-cam = CamType.init(id=args.id, settings=settings, start=True, verbose=True)
+cam = CamType.init(id=args.id, settings=settings, start=False, verbose=True)
+cam.start()
+cam.stop()
+cam.start()
+
 print(cam.get_timestamp_micro())
 
 while True:
