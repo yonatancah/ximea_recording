@@ -10,19 +10,22 @@ from .base_writer import BaseVideoWriter
 
 class OpenCVVideoWriter(BaseVideoWriter):
 
-    def __init__(self, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4") -> None:
+    def __init__(self, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4", autoflush: bool = True) -> None:
         self.fname = fname
         self.fourcc = fourcc
         self.frame_rate = frame_rate
         self._writer: cv2.VideoWriter = None
         self._isclosed = False
+        self._autoflush = autoflush
+        self._frames = []
 
     @classmethod
-    def open(cls, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4") -> OpenCVVideoWriter:
+    def open(cls, fname: str, frame_rate: int, fourcc: Literal["FMP4"] = "FMP4", autoflush: bool = False) -> OpenCVVideoWriter:
         return OpenCVVideoWriter(
             fname=fname,
             frame_rate=frame_rate,
             fourcc=fourcc,
+            autoflush=autoflush,
         )
 
     def write(self, frame: NDArray) -> None:
@@ -34,9 +37,19 @@ class OpenCVVideoWriter(BaseVideoWriter):
                 self.frame_rate,
                 (width, height),
             )
-        self._writer.write(frame)
+
+        if self._autoflush:
+            self._writer.write(frame)
+        else:
+            self._frames.append(frame)
+
+    def flush(self) -> None:
+        for frame in self._frames:
+            self._writer.write(frame)
+        self._frames.clear()
 
     def close(self) -> None:
+        self.flush()
         self._writer.release()
         self._isclosed = True
 

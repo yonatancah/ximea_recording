@@ -18,6 +18,10 @@ class BaseVideoWriter(ABC):
         ...
 
     @abstractmethod
+    def flush(self) -> None:
+        ...
+
+    @abstractmethod
     def close(self) -> None:
         ...
 
