@@ -9,7 +9,7 @@ if __name__ == '__main__':
         worker = CameraWorker.init(
             cam_type=DummyCamera,
             cam_id=cam_id, 
-            cam_settings=CameraSettings(exposure_usec=100, frame_rate=15, white_balance_auto=True, image_format='RGB', bit_depth=8), 
+            cam_settings=CameraSettings(exposure_usec=100, gain_analog=17, frame_rate=15, white_balance_auto=True, image_format='RGB', bit_depth=8), 
             timestamp_correction=0,
         )
         worker.start()

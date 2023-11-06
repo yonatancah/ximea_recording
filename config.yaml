@@ -3,14 +3,18 @@ camera-ids:
   - CAM2
   - CAM3
   - CAM4
-  - CAM5
-  - CAM6
+  # - CAM5
+  # - CAM6
+  # - CAM7
+  - CAM8
+  - CAM9
+  - CAM10
 
 
 camera-settings:
-  exposure: 8000
+  exposure: 7000
   gain_analog: 17
-  frame_rate: 60
+  frame_rate: 30
   auto-white_balance: true
   image-format: RGB
   bit-depth: 24

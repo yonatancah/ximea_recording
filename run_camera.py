@@ -47,7 +47,7 @@ cam.start()
 video_writer =OpenCVVideoWriter.open(
     fname=str('testvideo.avi'), 
     frame_rate=settings.frame_rate, 
-    fourcc='XVID',
+    fourcc='FFV1',
     autoflush=False,    
 )
 timestamp_writer = CSVTimestampWriter.open(str('testtimestamp.txt'))
