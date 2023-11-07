@@ -52,4 +52,4 @@ if __name__ == '__main__':
     trigger_detector.close_trigger_detected.connect(lambda: print('end calibration ... ', sys.exit()))
 
     while True:
-        trigger_detector.wait_for_triggers(start='a', stop='d', close='c')
+        trigger_detector.wait_for_triggers(start='a', stop='d', close=None)

@@ -27,9 +27,9 @@ def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settin
             # test = r"C:\\Users\\VR-PC-User\\Desktop\\data\\S3_replication\\S3_rep_test\\9990\\S001\\camera\\XIMEARecording_T005_068_rock_novisible_close_attack_weapons_nosafehouse.mkv"
             # event = StartEvent(destination=test)
             destination_path = base_path.joinpath(*Path(event.destination).parts[5:])
-            destination_path.mkdir(parents=True, exist_ok=True)
+            destination_path.stem.mkdir(parents=True, exist_ok=True)
 
-            video_path = destination_path.joinpath(f"{cam_id}_{destination_path.stem}.mkv")
+            video_path = destination_path.joinpath(f"{cam_id}_{destination_path.stem}.avi")
             print(f"{cam_id} opening files")
             video_writer = OpenCVVideoWriter.open(fname=str(video_path), frame_rate=cam_settings.frame_rate, fourcc='XVID' ,autoflush=False)
             timestamp_writer = CSVTimestampWriter.open(str(video_path.with_suffix(".txt")))
@@ -64,11 +64,6 @@ def run_camera(queue: Queue, cam_type: Type[BaseCamera], cam_id: str, cam_settin
         else:
             raise ValueError(f"Unrecognized Event: {event}")
                         
-
-
-
-
-    # cam.start()
 
 class StartEvent(NamedTuple):
     destination: str

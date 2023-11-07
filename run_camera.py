@@ -45,12 +45,12 @@ cam = CamType.init(id=args.id, settings=settings, start=False, verbose=True)
 cam.start()
 
 video_writer =OpenCVVideoWriter.open(
-    fname=str('testvideo.avi'), 
+    fname=str('testvideo60fps.avi'), 
     frame_rate=settings.frame_rate, 
-    fourcc='FFV1',
+    fourcc='XVID',
     autoflush=False,    
 )
-timestamp_writer = CSVTimestampWriter.open(str('testtimestamp.txt'))
+timestamp_writer = CSVTimestampWriter.open(str('testtimestamp60fps.txt'))
 print(cam.get_timestamp_micro())
 
 while True:
