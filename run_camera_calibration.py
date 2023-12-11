@@ -29,10 +29,10 @@ if __name__ == '__main__':
         )
         worker.start()
         workers.append(worker)
+ 
+    destination=r'D:\\Users\\VR-PC-User\\Desktop\\data\\study3_1112'
 
-    destination=r'D:\\Users\\VR-PC-User\\Desktop\\data\\Calibration'
-
-    # Wait for trigger
+    # Wait for triggera
     trigger_detector = KeyboardTriggerDetector()
 
     def send_start_event(workers,destination):
