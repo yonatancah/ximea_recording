@@ -48,7 +48,7 @@ video_writer =OpenCVVideoWriter.open(
     fname=str('testvideo60fps.avi'), 
     frame_rate=settings.frame_rate, 
     fourcc='XVID',
-    autoflush=False,    
+    autoflush=True,    
 )
 timestamp_writer = CSVTimestampWriter.open(str('testtimestamp60fps.txt'))
 print(cam.get_timestamp_micro())
@@ -68,6 +68,6 @@ while True:
 timestamp_writer.close()
 video_writer.close()
 cam.stop()
-cam.close()
+# cam.close()
 
 
